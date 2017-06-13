@@ -66,10 +66,7 @@ var remove = function(req, res, next) {
 var edit = function(req, res, next) {
   let id = req.params._id
   m_user.findById({_id:id}, function(err, result) {
-    m_user.findOneAndUpdate({_id:id},
-      {$set : {username: req.body.username || result.username,
-      password: req.body.password || result.password
-      function(err, result) {
+    m_user.findOneAndUpdate({_id:id}, {$set : {username: req.body.username || result.username, password: req.body.password || result.password}}, function(err, result) {
         if(!err) res.send("update successful\n"+ result)
         else res.send(err.message)
     })
