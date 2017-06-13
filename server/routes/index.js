@@ -14,8 +14,8 @@ router.put('/api/house/:_id', c_house.edit) //done edit user hash password
 router.delete('/api/house/:_id', c_house.remove) //done
 
 //user
-router.post('/api/user', c_user.signin)
-router.post('/api/user', c_user.signup)
+router.post('/api/user/signin', c_user.signin)
+router.post('/api/user/signup', c_user.signup)
 router.get('/api/user', c_user.getAll) //done get user
 router.get('/api/user/:_id', c_user.getById) //done
 router.put('/api/user/:_id', c_user.edit) //done edit user hash password
