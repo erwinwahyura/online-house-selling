@@ -9,7 +9,7 @@ var houseSchema = new Schema({
   deskripsi: {
     type: String,
     required: [true, 'Fill the title please!']
-  }
+  },
   tags: {
     type: String,
     required: [true, 'Fill the title please!']
@@ -21,7 +21,7 @@ var houseSchema = new Schema({
   kota: {
     type: String,
     required: [true, 'Fill the title please!']
-  }
+  },
   harga: {
     type: Number,
     required: [true, 'Fill the title please!']
