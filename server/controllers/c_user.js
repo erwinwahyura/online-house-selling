@@ -6,16 +6,39 @@ var jwt = require('jsonwebtoken')
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
 var salt = bcrypt.genSaltSync(saltRounds);
+require('dotenv').config()
 
-var add = function(req, res, next){
-    var user = new m_user({
-      username:req.body.username,
-      password:req.body.password
-    })
-    user.save(function(err,result){
-      if(!err) res.send(result)
-      else res.send(err.message)
-    })
+var signup = function(req, res, next){
+  var hash = bcrypt.hashSync(req.body.password, salt);
+  var user = new m_user({
+    username:req.body.username,
+    password:hash
+  })
+  user.save(function(err,result){
+    if(!err) res.send(result)
+    else res.send(err.message)
+  })
+}
+
+var signin = function(req, res, next) {
+  var username = req.body.username;
+  var password = req.body.password;
+
+  m_user.findOne({ username: username }, function(err, user) {
+    if(err) res.send(err);
+    if(username) {
+      bcrypt.compare(password, username.password)
+      .then(result => {
+        if(result) {
+          var token = jwt.sign({id: user._id, username: user.username}, process.env.SECRET);
+          res.send({token, username: user.username})
+        } else {
+          res.send({ msg: 'Incorrect password' });
+        }
+      })
+      .catch(err => console.log(err))
+    } else res.send({ msg: 'No such user' })
+  })
 }
 
 var getAll = function(req, res, next) {
@@ -54,7 +77,8 @@ var edit = function(req, res, next) {
 }
 
 module.exports = {
-  add,
+  signin,
+  signup,
   remove,
   getAll,
   getById,
