@@ -7,11 +7,11 @@ router.get('/', function(req, res) {
   res.send('alive')
 })
 //house
-router.post('/api/house', c_house.add)
+router.post('/api/house', c_user.userInfo, c_house.add)
 router.get('/api/house', c_house.getAll) //done get user
 router.get('/api/house/:_id', c_house.getById) //done
-router.put('/api/house/:_id', c_house.edit) //done edit user hash password
-router.delete('/api/house/:_id', c_house.remove) //done
+router.put('/api/house/:_id', c_user.userInfo, c_house.edit) //done edit user hash password
+router.delete('/api/house/:_id', c_user.userInfo, c_house.remove) //done
 
 //user
 router.post('/api/user/signin', c_user.signin)
