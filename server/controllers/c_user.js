@@ -8,6 +8,25 @@ const saltRounds = 10;
 var salt = bcrypt.genSaltSync(saltRounds);
 require('dotenv').config()
 
+
+var userInfo = function(req, res, next) {
+  let token = req.body.token
+  if(token) {
+    jwt.verify(token, process.env.SECRET, (err, decoded) => {
+      if(!err) {
+        req.body.creator = decoded.id;
+        console.log('--user--', req.body.creator);
+        console.log('--userinfo--->>',decoded.id);
+        next()
+      } else {
+        res.send(err)
+      }
+    })
+  } else {
+    res.send({msg: 'Not logged in'})
+  }
+}
+
 var signup = function(req, res, next){
   var hash = bcrypt.hashSync(req.body.password, salt);
   var user = new m_user({
@@ -26,8 +45,9 @@ var signin = function(req, res, next) {
 
   m_user.findOne({ username: username }, function(err, user) {
     if(err) res.send(err);
-    if(username) {
-      bcrypt.compare(password, username.password)
+    if(user) {
+      console.log(user);
+      bcrypt.compare(password, user.password)
       .then(result => {
         if(result) {
           var token = jwt.sign({id: user._id, username: user.username}, process.env.SECRET);
@@ -79,5 +99,6 @@ module.exports = {
   remove,
   getAll,
   getById,
-  edit
+  edit,
+  userInfo
 }
